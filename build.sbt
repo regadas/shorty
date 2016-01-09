@@ -1,3 +1,7 @@
+enablePlugins(JavaAppPackaging)
+
+enablePlugins(DockerPlugin)
+
 name := "shorty"
 
 version := "1.0"
@@ -16,3 +20,5 @@ libraryDependencies ++= Seq(
 )
 
 resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/release"
+
+dockerExposedPorts := Seq(8080)

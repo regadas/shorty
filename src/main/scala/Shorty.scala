@@ -53,7 +53,9 @@ object ShortyService {
 object Shorty extends App {
   implicit val cache = GuavaCache[String, String](1000, 1000 * 60 * 30)
 
-  BlazeBuilder.bindHttp(8080)
+  val host = Option(System.getenv("SHORTY_HOST")).getOrElse("0.0.0.0")
+  val port = Option(System.getenv("SHORTY_PORT")).map(_.toInt).getOrElse(8080)
+  BlazeBuilder.bindHttp(port, host)
     .mountService(ShortyService.service, "/")
     .run
     .awaitShutdown()
