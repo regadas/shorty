@@ -13,8 +13,8 @@ case class ShortyUrl(id: String, url: String) {
 }
 
 object ShortyUrl {
-  def apply(url:String)(implicit cache: Cache[String, String]) = {
-    new ShortyUrl(randomBase36 , url)
+  def apply(url: String)(implicit cache: Cache[String, String]) = {
+    new ShortyUrl(randomBase36, url)
   }
 
   //XXX: this is far from ideal
@@ -35,15 +35,15 @@ object ShortyService {
   def service(implicit cache: Cache[String, String]) = HttpService {
     case GET -> Root / shorty =>
       cache.get(shorty) match {
-      case Some(url) => Found(Uri.fromString(url).valueOr(e => throw new ParseException(e)))
-      case None => NotFound()
-    }
+        case Some(url) => Found(Uri.fromString(url).valueOr(e => throw new ParseException(e)))
+        case None => NotFound()
+      }
     case req@POST -> Root => req.decode[UrlForm] { form =>
-      Ok(form.get("url") map { url =>
-        val shorty = ShortyUrl(url)
+      val shortyUrls = form.get("url").map(ShortyUrl(_))
+      shortyUrls.foreach { shorty =>
         cache += shorty.id -> shorty.url
-        shorty
-      })
+      }
+      Ok(shortyUrls)
     } handleWith {
       case e: Exception => BadRequest(jSingleObject("error", jString(e.getMessage)))
     }
