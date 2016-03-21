@@ -1,12 +1,13 @@
+import argonaut.Argonaut._
+import argonaut._
 import org.apache.commons.validator.routines.UrlValidator
-
-import util.Random
 import org.http4s.argonaut._
-import org.http4s.server._
 import org.http4s.dsl._
-import org.http4s.{UrlForm, ParseException, Uri}
+import org.http4s.server._
 import org.http4s.server.blaze.BlazeBuilder
-import argonaut._, Argonaut._
+import org.http4s.{ParseException, Uri, UrlForm}
+
+import scala.util.Random
 
 case class ShortyUrl(id: String, url: String) {
   require(new UrlValidator().isValid(url), "Invalid URL")
@@ -55,6 +56,7 @@ object Shorty extends App {
 
   val host = Option(System.getenv("SHORTY_HOST")).getOrElse("0.0.0.0")
   val port = Option(System.getenv("SHORTY_PORT")).map(_.toInt).getOrElse(8080)
+
   BlazeBuilder.bindHttp(port, host)
     .mountService(ShortyService.service, "/")
     .run
