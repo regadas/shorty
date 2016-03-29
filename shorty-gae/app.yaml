@@ -1,2 +1,3 @@
 runtime: custom
 vm: true
+threadsafe: true
