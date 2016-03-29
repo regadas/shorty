@@ -1,14 +1,16 @@
 ## Shorty: URL Shortener Service
 by Filipe Regadas (@[regadas](http://twitter.com/regadas))
 
-This service encodes URL in base-36 and stores them in cache. 
+This service is a simple url shortener service that uses `base36` to encode URL's. Uses Google Datastore and is deployable to Google App Engine through the usage of managed vms (Flexible Environment).  
 
 ## Usage
 
 You can run it locally by:
 
 ```
-$ sbt run
+$ gcloud beta emulators datastore start
+$ eval "$(gcloud beta emulators datastore env-init)" 
+$ sbt shorty-gae/run
 ```
 
 POST a list of url's and get there id:
@@ -35,3 +37,10 @@ Use those id's:
 $ curl -L http://localhost:8080/tatiji
 ```
 
+## Google App Engine deploy
+
+```
+$ glcoud init 
+$ sbt shorty-gae/assembly
+$ gcloud preview app deploy shorty-gae/app.yaml --docker-build local --promote
+```
