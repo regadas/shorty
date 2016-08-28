@@ -5,7 +5,7 @@ import io.regadas.shorty.core.{Datastore, IdGenerator, ShortyUrl}
 import org.http4s.argonaut._
 import org.http4s.dsl._
 import org.http4s.server.blaze.BlazeBuilder
-import org.http4s.{HttpService, ParseException, Uri, UrlForm}
+import org.http4s.{HttpService, Uri, UrlForm}
 import org.log4s.getLogger
 
 import scala.concurrent.ExecutionContext
@@ -25,7 +25,7 @@ object ShortyHttpService extends Logging {
       Task {
         datastore.get(id)
       } flatMap {
-        case Some(e) => Found(Uri.fromString(e.location).valueOr(e => throw ParseException(e)))
+        case Some(e) => Found(Uri.fromString(e.location).valueOr(e => throw e))
         case None    => NotFound()
       }
     case req @ POST -> Root =>

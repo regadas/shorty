@@ -1,15 +1,15 @@
 package io.regadas.shorty.gae
 
-import com.google.gcloud.datastore.{DatastoreOptions, Entity}
+import com.google.cloud.datastore.{DatastoreOptions, Entity, Key}
 import io.regadas.shorty.core.{Datastore, ShortyUrl}
 
 final class GaeDatastore extends Datastore {
   protected lazy val datastore = DatastoreOptions.defaultInstance().service()
 
   override def get(id: String): Option[ShortyUrl] = {
-    val key = keyFactory.newKey(id)
+    val key: Key = keyFactory.newKey(id)
 
-    Option(datastore.get(key)).map(e => ShortyUrl(id, e.getString("location")))
+    Option(datastore.get(key, Nil: _*)).map(e => ShortyUrl(id, e.getString("location")))
   }
 
   override def put(xs: ShortyUrl*): Unit = {
