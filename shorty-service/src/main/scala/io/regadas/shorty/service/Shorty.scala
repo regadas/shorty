@@ -16,26 +16,30 @@ trait Logging {
 }
 
 object ShortyHttpService extends Logging {
-  implicit val shortyUrlJson = casecodec2(ShortyUrl.apply, ShortyUrl.unapply)("id", "location")
+  implicit val shortyUrlJson    = casecodec2(ShortyUrl.apply, ShortyUrl.unapply)("id", "location")
   implicit val shortyUrlEncoder = jsonEncoderOf[Seq[ShortyUrl]]
 
-  def service(datastore: Datastore, idGenerator: IdGenerator)
-             (implicit executionContext: ExecutionContext) = HttpService {
-    case GET -> Root / id => Task {
-      datastore.get(id)
-    } flatMap {
-      case Some(e) => Found(Uri.fromString(e.location).valueOr(e => throw new ParseException(e)))
-      case None => NotFound()
-    }
-    case req@POST -> Root => req.decode[UrlForm] { form =>
-      val shortyUrls = form.get("url").map { url => ShortyUrl(idGenerator.generate(), url) }
+  def service(datastore: Datastore, idGenerator: IdGenerator)(
+      implicit executionContext: ExecutionContext) = HttpService {
+    case GET -> Root / id =>
+      Task {
+        datastore.get(id)
+      } flatMap {
+        case Some(e) => Found(Uri.fromString(e.location).valueOr(e => throw ParseException(e)))
+        case None    => NotFound()
+      }
+    case req @ POST -> Root =>
+      req.decode[UrlForm] { form =>
+        val shortyUrls = form.get("url").map { url =>
+          ShortyUrl(idGenerator.generate(), url)
+        }
 
-      datastore.put(shortyUrls: _*)
+        datastore.put(shortyUrls: _*)
 
-      Ok(shortyUrls)
-    } handleWith {
-      case e: Exception => BadRequest(jSingleObject("error", jString(e.getMessage)))
-    }
+        Ok(shortyUrls)
+      } handleWith {
+        case e: Exception => BadRequest(jSingleObject("error", jString(e.getMessage)))
+      }
   }
 }
 
@@ -44,13 +48,12 @@ object ShortyService {
   val host = Option(System.getenv("SHORTY_HOST")).getOrElse("0.0.0.0")
   val port = Option(System.getenv("SHORTY_PORT")).map(_.toInt).getOrElse(8080)
 
-  def service(datastore: Datastore, idGenerator: IdGenerator)
-             (implicit executionContext: ExecutionContext = ExecutionContext.global) = {
-    BlazeBuilder.bindHttp(port, host)
+  def service(datastore: Datastore, idGenerator: IdGenerator)(
+      implicit executionContext: ExecutionContext = ExecutionContext.global) = {
+    BlazeBuilder
+      .bindHttp(port, host)
       .mountService(ShortyHttpService.service(datastore, idGenerator), "/")
       .run
       .awaitShutdown()
   }
 }
-
-

@@ -15,9 +15,7 @@ final class GaeDatastore extends Datastore {
   override def put(xs: ShortyUrl*): Unit = {
     val entities = xs.map { url =>
       val key = keyFactory.newKey(url.id)
-      Entity.builder(key)
-        .set("location", url.location)
-        .build()
+      Entity.builder(key).set("location", url.location).build()
     }
 
     datastore.put(entities: _*)
