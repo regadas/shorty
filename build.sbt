@@ -18,7 +18,10 @@ val commonSettings = Seq(
 )
 
 lazy val root = Project("shorty", file("."))
-  .settings(commonSettings)
+  .settings(
+    commonSettings,
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+  )
   .aggregate(shortyCore, shortyService, shortyGae)
 
 lazy val shortyCore = Project("shorty-core", file("shorty-core"))
@@ -50,5 +53,3 @@ lazy val shortyGae = Project("shorty-gae", file("shorty-gae"))
     )
   )
   .dependsOn(shortyCore, shortyService)
-
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
