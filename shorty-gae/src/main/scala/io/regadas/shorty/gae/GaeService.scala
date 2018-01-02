@@ -1,3 +1,5 @@
+package io.regadas.shorty.gae
+
 import cats.effect._
 import io.regadas.shorty.core.RandomBase36
 import io.regadas.shorty.gae.GaeDatastore
