@@ -13,11 +13,11 @@ object ShortyUrl {
 }
 
 trait IdGenerator {
-  def generate(): String
+  def generate: String
 }
 
 object RandomBase36 extends IdGenerator {
-  override def generate() = {
+  override def generate: String = {
     Integer.toString(new Random().nextInt(Integer.MAX_VALUE), 36)
   }
 }
@@ -25,5 +25,5 @@ object RandomBase36 extends IdGenerator {
 trait Datastore {
   def get(id: String): Option[ShortyUrl]
 
-  def put(su: ShortyUrl*)
+  def put(su: ShortyUrl*): Unit
 }
