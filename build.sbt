@@ -2,7 +2,7 @@ import sbt._
 
 val Http4sVersion = "0.18.0-M7"
 val LogbackVersion = "1.2.3"
-val GcloudVersion = "0.2.8"
+val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
 
 val commonSettings = Seq(
@@ -49,7 +49,7 @@ lazy val shortyGae = Project("shorty-gae", file("shorty-gae"))
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "com.google.cloud" % "gcloud-java-datastore" % GcloudVersion
+      "com.google.cloud" % "google-cloud" % GcloudVersion
     )
   )
   .dependsOn(shortyCore, shortyService)
