@@ -1,4 +1,4 @@
-## Shorty: URL Shortener Service
+## Shorty: URL Shortener Service [![CircleCI](https://circleci.com/gh/regadas/shorty.svg?style=svg)](https://circleci.com/gh/regadas/shorty)
 by Filipe Regadas (@[regadas](http://twitter.com/regadas))
 
 This service is a simple url shortener service that uses `base36` to encode URL's. Uses Google Datastore and is deployable to Google App Engine through the usage of managed vms (Flexible Environment).  
