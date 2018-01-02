@@ -1,59 +1,43 @@
 package io.regadas.shorty.service
 
-import argonaut.Argonaut._
 import io.regadas.shorty.core.{Datastore, IdGenerator, ShortyUrl}
-import org.http4s.argonaut._
-import org.http4s.dsl._
-import org.http4s.server.blaze.BlazeBuilder
-import org.http4s.{HttpService, Uri, UrlForm}
-import org.log4s.getLogger
-
-import scala.concurrent.ExecutionContext
-import scalaz.concurrent.Task
+import io.circe.generic.auto._
+import io.circe.syntax._
+import org.log4s.{Logger, getLogger}
+import cats.effect._
+import org.http4s._
+import org.http4s.circe._
+import org.http4s.dsl.io._
+import cats.implicits._
+import org.http4s.headers.Location
 
 trait Logging {
-  protected lazy val log = getLogger
+  protected lazy val log: Logger = getLogger
 }
 
 object ShortyHttpService extends Logging {
-  implicit val shortyUrlJson    = casecodec2(ShortyUrl.apply, ShortyUrl.unapply)("id", "location")
-  implicit val shortyUrlEncoder = jsonEncoderOf[Seq[ShortyUrl]]
+  case class Error(msg: String)
 
-  def service(datastore: Datastore, idGenerator: IdGenerator)(
-      implicit executionContext: ExecutionContext) = HttpService {
-    case GET -> Root / id =>
-      Task {
-        datastore.get(id)
-      } flatMap {
-        case Some(e) => Found(Uri.fromString(e.location).valueOr(e => throw e))
-        case None    => NotFound()
-      }
-    case req @ POST -> Root =>
-      req.decode[UrlForm] { form =>
-        val shortyUrls = form.get("url").map { url =>
-          ShortyUrl(idGenerator.generate(), url)
+  def service(datastore: Datastore, idGenerator: IdGenerator): HttpService[IO] =
+    HttpService[IO] {
+      case GET -> Root / id =>
+        IO(datastore.get(id))
+          .flatMap {
+            case Some(e) =>
+              Found(Location(Uri.unsafeFromString(e.location)))
+            case None => NotFound()
+          }
+      case req @ POST -> Root =>
+        req.decode[UrlForm] { form =>
+          val shortyUrls = form.get("url").map { url =>
+            ShortyUrl(idGenerator.generate, url)
+          }
+
+          datastore.put(shortyUrls: _*)
+
+          Ok(shortyUrls.asJson)
+        } handleErrorWith { e =>
+          BadRequest(Error(e.getMessage).asJson)
         }
-
-        datastore.put(shortyUrls: _*)
-
-        Ok(shortyUrls)
-      } handleWith {
-        case e: Exception => BadRequest(jSingleObject("error", jString(e.getMessage)))
-      }
-  }
-}
-
-object ShortyService {
-
-  val host = Option(System.getenv("SHORTY_HOST")).getOrElse("0.0.0.0")
-  val port = Option(System.getenv("SHORTY_PORT")).map(_.toInt).getOrElse(8080)
-
-  def service(datastore: Datastore, idGenerator: IdGenerator)(
-      implicit executionContext: ExecutionContext = ExecutionContext.global) = {
-    BlazeBuilder
-      .bindHttp(port, host)
-      .mountService(ShortyHttpService.service(datastore, idGenerator), "/")
-      .run
-      .awaitShutdown()
-  }
+    }
 }
