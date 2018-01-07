@@ -1,6 +1,6 @@
 package io.regadas.shorty.service
 
-import io.regadas.shorty.core.{Datastore, IdGenerator, ShortyUrl}
+import io.regadas.shorty.core.{Datastore, HashId, ShortyUrl}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.log4s.{Logger, getLogger}
@@ -18,7 +18,7 @@ trait Logging {
 object ShortyHttpService extends Logging {
   case class Error(msg: String)
 
-  def service(datastore: Datastore, idGenerator: IdGenerator): HttpService[IO] =
+  def service(datastore: Datastore, hashId: HashId): HttpService[IO] =
     HttpService[IO] {
       case GET -> Root / id =>
         IO(datastore.get(id))
@@ -30,7 +30,7 @@ object ShortyHttpService extends Logging {
       case req @ POST -> Root =>
         req.decode[UrlForm] { form =>
           val shortyUrls = form.get("url").map { url =>
-            ShortyUrl(idGenerator.generate, url)
+            ShortyUrl(hashId.generate(url), url)
           }
 
           datastore.put(shortyUrls: _*)

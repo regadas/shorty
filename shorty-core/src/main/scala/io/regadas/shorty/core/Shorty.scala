@@ -3,6 +3,7 @@ package io.regadas.shorty.core
 import org.apache.commons.validator.routines.UrlValidator
 
 import scala.util.Random
+import scala.util.hashing.MurmurHash3
 
 case class ShortyUrl(id: String, location: String) {
   require(new UrlValidator().isValid(location), "Invalid URL")
@@ -12,14 +13,16 @@ object ShortyUrl {
   val kind = "Url"
 }
 
-trait IdGenerator {
-  def generate: String
+trait HashId {
+  def generate(value: String): String
 }
 
-object RandomBase36 extends IdGenerator {
-  override def generate: String = {
+object HashIds {
+  val randomBase36: HashId = _ =>
     Integer.toString(new Random().nextInt(Integer.MAX_VALUE), 36)
-  }
+
+  val murmurHash3: HashId = value =>
+    Integer.toString(MurmurHash3.stringHash(value), 36)
 }
 
 trait Datastore {

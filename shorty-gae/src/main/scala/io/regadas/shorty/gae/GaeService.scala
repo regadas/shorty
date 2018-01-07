@@ -1,7 +1,7 @@
 package io.regadas.shorty.gae
 
 import cats.effect._
-import io.regadas.shorty.core.RandomBase36
+import io.regadas.shorty.core.HashIds
 import io.regadas.shorty.service.ShortyHttpService
 import fs2.StreamApp
 import fs2.StreamApp.ExitCode
@@ -16,7 +16,8 @@ object GaeService extends StreamApp[IO] {
                       requestShutdown: IO[Unit]): fs2.Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(Port, Host)
-      .mountService(ShortyHttpService.service(new GaeDatastore, RandomBase36),
-                    "/")
+      .mountService(
+        ShortyHttpService.service(new GaeDatastore, HashIds.murmurHash3),
+        "/")
       .serve
 }
