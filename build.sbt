@@ -1,5 +1,6 @@
 import sbt._
 
+val CatsEffect = "0.8"
 val Http4sVersion = "0.18.0-M7"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
@@ -28,7 +29,8 @@ lazy val shortyCore = Project("shorty-core", file("shorty-core"))
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "commons-validator" % "commons-validator" % CommonsValidator
+      "commons-validator" % "commons-validator" % CommonsValidator,
+      "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
 
@@ -40,7 +42,8 @@ lazy val shortyService = Project("shorty-service", file("shorty-service"))
       "org.http4s" %% "http4s-circe" % Http4sVersion,
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
-      "io.circe" %% "circe-generic" % "0.9.0"
+      "io.circe" %% "circe-generic" % "0.9.0",
+      "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
   .dependsOn(shortyCore)
@@ -49,7 +52,8 @@ lazy val shortyGae = Project("shorty-gae", file("shorty-gae"))
   .settings(
     commonSettings,
     libraryDependencies ++= Seq(
-      "com.google.cloud" % "google-cloud" % GcloudVersion
+      "com.google.cloud" % "google-cloud" % GcloudVersion,
+      "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
   .dependsOn(shortyCore, shortyService)

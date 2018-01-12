@@ -21,21 +21,18 @@ object ShortyHttpService extends Logging {
   def service(datastore: Datastore, hashId: HashId): HttpService[IO] =
     HttpService[IO] {
       case GET -> Root / id =>
-        IO(datastore.get(id))
-          .flatMap {
-            case Some(e) =>
-              Found(Location(Uri.unsafeFromString(e.location)))
-            case None => NotFound()
-          }
+        datastore.get(id).flatMap {
+          case Some(e) => Found(Location(Uri.unsafeFromString(e.location)))
+          case None    => NotFound()
+        }
       case req @ POST -> Root =>
         req.decode[UrlForm] { form =>
           val shortyUrls = form.get("url").map { url =>
             ShortyUrl(hashId.generate(url), url)
           }
+          val json = datastore.put(shortyUrls: _*).map(_ => shortyUrls.asJson)
 
-          datastore.put(shortyUrls: _*)
-
-          Ok(shortyUrls.asJson)
+          Ok(json)
         } handleErrorWith { e =>
           BadRequest(Error(e.getMessage).asJson)
         }

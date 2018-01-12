@@ -1,5 +1,6 @@
 package io.regadas.shorty.core
 
+import cats.effect._
 import org.apache.commons.validator.routines.UrlValidator
 
 import scala.util.Random
@@ -26,7 +27,7 @@ object HashIds {
 }
 
 trait Datastore {
-  def get(id: String): Option[ShortyUrl]
+  def get(id: String): IO[Option[ShortyUrl]]
 
-  def put(su: ShortyUrl*): Unit
+  def put(su: ShortyUrl*): IO[Unit]
 }
