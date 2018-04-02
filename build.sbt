@@ -8,7 +8,7 @@ val CommonsValidator = "1.6"
 
 val commonSettings = Seq(
   organization := "io.regadas",
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.5",
   scalacOptions := Seq(
     "-target:jvm-1.8",
     "-deprecation",
