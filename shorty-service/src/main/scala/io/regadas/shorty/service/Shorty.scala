@@ -3,7 +3,7 @@ package io.regadas.shorty.service
 import io.regadas.shorty.core.{Datastore, HashId, ShortyUrl}
 import io.circe.generic.auto._
 import io.circe.syntax._
-import org.log4s.{Logger, getLogger}
+import org.log4s.{getLogger, Logger}
 import cats.effect._
 import org.http4s._
 import org.http4s.circe._

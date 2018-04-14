@@ -13,12 +13,9 @@ object GaeService extends StreamApp[IO] {
   val Port: Int =
     Option(System.getenv("SHORTY_PORT")).map(_.toInt).getOrElse(8080)
 
-  override def stream(args: List[String],
-                      requestShutdown: IO[Unit]): fs2.Stream[IO, ExitCode] =
+  override def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(Port, Host)
-      .mountService(
-        ShortyHttpService.service(new GaeDatastore, HashIds.murmurHash3),
-        "/")
+      .mountService(ShortyHttpService.service(new GaeDatastore, HashIds.murmurHash3), "/")
       .serve
 }

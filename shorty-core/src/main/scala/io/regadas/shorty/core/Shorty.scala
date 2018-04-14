@@ -19,11 +19,9 @@ trait HashId {
 }
 
 object HashIds {
-  val randomBase36: HashId = _ =>
-    Integer.toString(new Random().nextInt(Integer.MAX_VALUE), 36)
+  val randomBase36: HashId = _ => Integer.toString(new Random().nextInt(Integer.MAX_VALUE), 36)
 
-  val murmurHash3: HashId = value =>
-    Integer.toString(MurmurHash3.stringHash(value), 36)
+  val murmurHash3: HashId = value => Integer.toString(MurmurHash3.stringHash(value), 36)
 }
 
 trait Datastore {
