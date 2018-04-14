@@ -1,7 +1,7 @@
 import sbt._
 
-val CatsEffect = "0.8"
-val Http4sVersion = "0.18.0-M7"
+val CatsEffect = "0.10"
+val Http4sVersion = "0.18.7"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"

@@ -6,6 +6,7 @@ import io.regadas.shorty.service.ShortyHttpService
 import fs2.StreamApp
 import fs2.StreamApp.ExitCode
 import org.http4s.server.blaze._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object GaeService extends StreamApp[IO] {
   val Host: String = Option(System.getenv("SHORTY_HOST")).getOrElse("0.0.0.0")
