@@ -1,17 +1,15 @@
 package io.regadas.shorty.core
 
 import cats.effect._
-import org.apache.commons.validator.routines.UrlValidator
+import eu.timepit.refined.api.Refined
+import io.regadas.shorty.core.refined._
 import simulacrum._
 
 import scala.language.implicitConversions
 import scala.util.Random
 import scala.util.hashing.MurmurHash3
 
-
-case class ShortyUrl(id: String, location: String) {
-  require(new UrlValidator().isValid(location), "Invalid URL")
-}
+final case class ShortyUrl(id: String, location: String Refined ValidUrl)
 
 object ShortyUrl {
   val kind = "Url"

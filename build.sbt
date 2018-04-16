@@ -30,6 +30,7 @@ lazy val shortyCore = Project("shorty-core", file("shorty-core"))
     libraryDependencies ++= Seq(
       "commons-validator" % "commons-validator" % CommonsValidator,
       "com.github.mpilquist" %% "simulacrum" % simulacrumVersion,
+      "eu.timepit" %% "refined" % "0.8.7",
       "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
@@ -43,6 +44,7 @@ lazy val shortyService = Project("shorty-service", file("shorty-service"))
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "io.circe" %% "circe-generic" % "0.9.0",
+      "io.circe" %% "circe-refined" % "0.9.0",
       "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
