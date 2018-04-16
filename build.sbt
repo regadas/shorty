@@ -5,6 +5,7 @@ val Http4sVersion = "0.18.7"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
+val simulacrumVersion = "0.12.0"
 
 val commonSettings = Seq(
   organization := "io.regadas",
@@ -19,17 +20,16 @@ val commonSettings = Seq(
 )
 
 lazy val root = Project("shorty", file("."))
-  .settings(
-    commonSettings,
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
-  )
+  .settings(commonSettings)
   .aggregate(shortyCore, shortyService, shortyGae)
 
 lazy val shortyCore = Project("shorty-core", file("shorty-core"))
   .settings(
     commonSettings,
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
     libraryDependencies ++= Seq(
       "commons-validator" % "commons-validator" % CommonsValidator,
+      "com.github.mpilquist" %% "simulacrum" % simulacrumVersion,
       "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )

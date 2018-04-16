@@ -1,11 +1,11 @@
 package io.regadas.shorty.gae
 
 import cats.effect._
-import io.regadas.shorty.core.HashIds
-import io.regadas.shorty.service.ShortyHttpService
 import fs2.StreamApp
 import fs2.StreamApp.ExitCode
+import io.regadas.shorty.service.ShortyHttpService
 import org.http4s.server.blaze._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object GaeService extends StreamApp[IO] {
@@ -16,6 +16,6 @@ object GaeService extends StreamApp[IO] {
   override def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, ExitCode] =
     BlazeBuilder[IO]
       .bindHttp(Port, Host)
-      .mountService(ShortyHttpService.service(new GaeDatastore, HashIds.murmurHash3), "/")
+      .mountService(ShortyHttpService.service(new GaeDatastore), "/")
       .serve
 }
