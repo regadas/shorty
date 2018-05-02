@@ -9,7 +9,7 @@ val simulacrumVersion = "0.12.0"
 
 val commonSettings = Seq(
   organization := "io.regadas",
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.6",
   scalacOptions := Seq(
     "-target:jvm-1.8",
     "-deprecation",
