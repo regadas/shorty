@@ -12,13 +12,7 @@ val RefinedVersion = "0.9.1"
 val commonSettings = Seq(
   organization := "io.regadas",
   scalaVersion := "2.12.6",
-  scalacOptions := Seq(
-    "-target:jvm-1.8",
-    "-deprecation",
-    "-feature",
-    "-unchecked",
-    "-Ypartial-unification"
-  )
+  scalacOptions := commonScalacOptions
 )
 
 lazy val root = Project("shorty", file("."))
@@ -61,3 +55,19 @@ lazy val shortyGae = Project("shorty-gae", file("shorty-gae"))
     )
   )
   .dependsOn(shortyCore, shortyService)
+
+lazy val commonScalacOptions = Seq(
+  "-deprecation",
+  "-encoding",
+  "UTF-8",
+  "-feature",
+  "-unchecked",
+  "-Ypartial-unification",
+  "-Yno-adapted-args",
+  "-Ywarn-dead-code",
+  "-Ywarn-value-discard",
+//  "-Xfatal-warnings",
+  "-Xlint:-unused,_",
+  "-Ywarn-unused:imports",
+  "-Xfuture"
+)
