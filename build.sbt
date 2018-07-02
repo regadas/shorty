@@ -1,11 +1,13 @@
 import sbt._
 
-val CatsEffect = "0.10"
-val Http4sVersion = "0.18.7"
+val CatsEffect = "0.10.1"
+val Http4sVersion = "0.18.13"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
-val simulacrumVersion = "0.12.0"
+val SimulacrumVersion = "0.12.0"
+val CirceVersion = "0.9.3"
+val RefinedVersion = "0.9.1"
 
 val commonSettings = Seq(
   organization := "io.regadas",
@@ -29,8 +31,8 @@ lazy val shortyCore = Project("shorty-core", file("shorty-core"))
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
     libraryDependencies ++= Seq(
       "commons-validator" % "commons-validator" % CommonsValidator,
-      "com.github.mpilquist" %% "simulacrum" % simulacrumVersion,
-      "eu.timepit" %% "refined" % "0.8.7",
+      "com.github.mpilquist" %% "simulacrum" % SimulacrumVersion,
+      "eu.timepit" %% "refined" % RefinedVersion,
       "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
@@ -43,8 +45,8 @@ lazy val shortyService = Project("shorty-service", file("shorty-service"))
       "org.http4s" %% "http4s-circe" % Http4sVersion,
       "org.http4s" %% "http4s-dsl" % Http4sVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
-      "io.circe" %% "circe-generic" % "0.9.0",
-      "io.circe" %% "circe-refined" % "0.9.0",
+      "io.circe" %% "circe-generic" % CirceVersion,
+      "io.circe" %% "circe-refined" % CirceVersion,
       "org.typelevel" %% "cats-effect" % CatsEffect
     )
   )
