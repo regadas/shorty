@@ -1,13 +1,13 @@
 import sbt._
 
-val CatsEffect = "0.10.1"
-val Http4sVersion = "0.18.13"
+val CatsEffect = "1.0.0-RC2"
+val Http4sVersion = "0.19.0-M1"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
 val SimulacrumVersion = "0.12.0"
 val CirceVersion = "0.9.3"
-val RefinedVersion = "0.9.1"
+val RefinedVersion = "0.9.2"
 
 val commonSettings = Seq(
   organization := "io.regadas",

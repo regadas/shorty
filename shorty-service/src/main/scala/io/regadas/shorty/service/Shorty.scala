@@ -25,8 +25,8 @@ object ShortyHttpService extends Logging {
 
   final case class Error(msgs: List[String])
 
-  def service(datastore: Datastore): HttpService[IO] =
-    HttpService[IO] {
+  def service(datastore: Datastore): HttpRoutes[IO] =
+    HttpRoutes.of[IO] {
       case GET -> Root / id =>
         datastore.get(id).flatMap {
           case Some(e) => Found(Location(Uri.unsafeFromString(e.location.value)))
