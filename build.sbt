@@ -7,7 +7,7 @@ val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
 val SimulacrumVersion = "0.12.0"
 val CirceVersion = "0.9.3"
-val RefinedVersion = "0.9.2"
+val RefinedVersion = "0.9.3"
 
 val commonSettings = Seq(
   organization := "io.regadas",
