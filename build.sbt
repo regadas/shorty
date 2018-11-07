@@ -22,7 +22,7 @@ lazy val root = Project("shorty", file("."))
 lazy val shortyCore = Project("shorty-core", file("shorty-core"))
   .settings(
     commonSettings,
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full),
     libraryDependencies ++= Seq(
       "commons-validator" % "commons-validator" % CommonsValidator,
       "com.github.mpilquist" %% "simulacrum" % SimulacrumVersion,
