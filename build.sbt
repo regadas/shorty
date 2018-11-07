@@ -1,13 +1,13 @@
 import sbt._
 
-val CatsEffect = "1.0.0-RC2"
+val CatsEffect = "1.0.0"
 val Http4sVersion = "0.19.0-M1"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
-val SimulacrumVersion = "0.12.0"
 val CirceVersion = "0.10.1"
-val RefinedVersion = "0.9.2"
+val SimulacrumVersion = "0.14.0"
+val RefinedVersion = "0.9.3"
 
 val commonSettings = Seq(
   organization := "io.regadas",
@@ -22,7 +22,7 @@ lazy val root = Project("shorty", file("."))
 lazy val shortyCore = Project("shorty-core", file("shorty-core"))
   .settings(
     commonSettings,
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full),
     libraryDependencies ++= Seq(
       "commons-validator" % "commons-validator" % CommonsValidator,
       "com.github.mpilquist" %% "simulacrum" % SimulacrumVersion,
