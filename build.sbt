@@ -5,8 +5,8 @@ val Http4sVersion = "0.19.0-M1"
 val LogbackVersion = "1.2.3"
 val GcloudVersion = "0.32.0-alpha"
 val CommonsValidator = "1.6"
+val CirceVersion = "0.10.1"
 val SimulacrumVersion = "0.14.0"
-val CirceVersion = "0.9.3"
 val RefinedVersion = "0.9.3"
 
 val commonSettings = Seq(
